@@ -7,14 +7,20 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
 
-  // await dotenv.load(fileName: ".env"); // .env ファイルを読み込む
+  try {
+    await WidgetsFlutterBinding.ensureInitialized();
+    print("WidgetsFlutterBinding.ensureInitialized");
+    await dotenv.load(fileName: ".env");
+    print("Supabase.initialize");
+    await Supabase.initialize(
+      url:  dotenv.get('SUPABASE_URL'),
+      anonKey: dotenv.get('SUPABASE_ANON_KEY'),
+    );
 
-  // await Supabase.initialize(
-  //   url: dotenv.get('SUPABASE_URL'), // .env から URL を取得
-  //   anonKey: dotenv.get('SUPABASE_ANON_KEY'), // .env から anonKey を取得
-  // );
-
-  runApp(MyApp());
+    runApp(MyApp());
+  } catch (e) {
+    print('Initialization error: $e');
+  }
 }
 
 class MyApp extends StatelessWidget {

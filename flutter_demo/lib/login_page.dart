@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -16,22 +19,27 @@ class _LoginPageState extends State<LoginPage> {
 
       // The users table resides within the auth schema and stores user authentication information (email address, password hash, authentication provider information, etc.).
 
-      // final response = await Supabase.instance.client.auth.signInWithPassword(
-      //   email: _emailController.text,
-      //   password: _passwordController.text,
-      // );
+      // print(_emailController.text);
+      // print(_passwordController.text);
 
-      Navigator.pushReplacementNamed(context, '/home');
+      // String hashPassword(String password) {
+      //   final bytes = utf8.encode(password); // パスワードをバイト列に変換
+      //   final hash = sha256.convert(bytes); // SHA-256でハッシュ化
+      //   return hash.toString();
+      // }
+
+      // final hashedPassword = hashPassword(_passwordController.text);
+      // print(hashedPassword);
 
       // public.users テーブルから email と password を照会
       final response = await Supabase.instance.client
           .from('users')
           .select()
           .eq('email', _emailController.text)
-          .eq('password', _passwordController.text)
-          .single();
+          .eq('password', _passwordController.text);
 
-      if (response != null) {
+      // Navigator.pushReplacementNamed(context, '/home');
+      if (response.length > 0) {
         // ログイン成功
         Navigator.pushReplacementNamed(context, '/home');
       } else {
